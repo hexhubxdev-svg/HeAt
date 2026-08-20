@@ -1,24 +1,27 @@
 import os
-from telegram import Update
-from telegram.ext import Application, CommandHandler, ContextTypes
+import discord
+from discord.ext import commands
 
-TOKEN = os.environ.get("BOT_TOKEN")
+TOKEN = os.environ.get("ddef08b7b5e10142673bdb9467fef74055ddc718459781363589a98f36420f4a")
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Welcome Use /help for commands")
+intents = discord.Intents.default()
+intents.message_content = True
+bot = commands.Bot(command_prefix='/', intents=intents)
 
-async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("""
-Available commands:
-/start - Start the bot
-/help - Show this help message
+@bot.event
+async def on_ready():
+    print(f'Bot Working {bot.user}')
+
+@bot.command()
+async def help(ctx):
+    await ctx.send("""
+    Hi
+    /help
+    /Start
 """)
 
-def main():
-    app = Application.builder().token(TOKEN).build()
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("help", help_command))
-    app.run_polling()
+@bot.command()
+async def start(ctx):
+    await ctx.send("What")
 
-if __name__ == "__main__":
-    main()
+bot.run(TOKEN)
